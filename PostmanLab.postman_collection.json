@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "6c4de960-52ca-43f9-bdb9-24f27cd6e6ab",
+		"name": "PostmanLab",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PostmanLab1",
+			"item": [
+				{
+					"name": "Get postmanLab1 secretinformation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-lab1.azurewebsites.net/SecretInformation",
+							"protocol": "https",
+							"host": [
+								"postman-lab1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"SecretInformation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PostmanLab2",
+			"item": [
+				{
+					"name": "Get Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"postmanLab2Token\", jsonData.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{clientId}}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "{{scope}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{clientSecret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://login.microsoftonline.com/{{tenant}}/oauth2/v2.0/token",
+							"protocol": "https",
+							"host": [
+								"login",
+								"microsoftonline",
+								"com"
+							],
+							"path": [
+								"{{tenant}}",
+								"oauth2",
+								"v2.0",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Secretinfo without Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-lab2.azurewebsites.net/SecretInformation",
+							"protocol": "https",
+							"host": [
+								"postman-lab2",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"SecretInformation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Secretinfo with Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{postmanLab2Token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://postman-lab2.azurewebsites.net/SecretInformation",
+							"protocol": "https",
+							"host": [
+								"postman-lab2",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"SecretInformation"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
